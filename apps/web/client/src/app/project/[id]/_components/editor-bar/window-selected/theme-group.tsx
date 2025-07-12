@@ -36,35 +36,35 @@ export function ThemeGroup({ frameData }: { frameData: FrameData }) {
             <Tooltip key="system">
                 <TooltipTrigger asChild>
                     <ToolbarButton
-                        className={`w-10 ${theme === SystemTheme.SYSTEM ? 'bg-background-tertiary hover:bg-background-tertiary' : 'hover:bg-background-tertiary/50 text-foreground-onlook'}`}
+                        className={`w-10 ${theme === SystemTheme.SYSTEM ? 'bg-background-secondary hover:bg-background-tertiary text-foreground-primary' : 'hover:bg-background-tertiary/50 text-foreground-onlook'}`}
                         onClick={() => changeTheme(SystemTheme.SYSTEM)}
                     >
                         <Icons.Laptop className="h-4 w-4" />
                     </ToolbarButton>
                 </TooltipTrigger>
-                <TooltipContent side="bottom">System Theme</TooltipContent>
+                <TooltipContent side="bottom" hideArrow className="mt-1">System Theme</TooltipContent>
             </Tooltip>
             <Tooltip key="dark">
                 <TooltipTrigger asChild>
                     <ToolbarButton
-                        className={`w-10 ${theme === SystemTheme.DARK ? 'bg-background-tertiary hover:bg-background-tertiary' : 'hover:bg-background-tertiary/50 text-foreground-onlook'}`}
+                        className={`w-10 ${theme === SystemTheme.DARK ? 'bg-background-secondary hover:bg-background-tertiary text-foreground-primary' : 'hover:bg-background-tertiary/50 text-foreground-onlook'}`}
                         onClick={() => changeTheme(SystemTheme.DARK)}
                     >
                         <Icons.Moon className="h-4 w-4" />
                     </ToolbarButton>
                 </TooltipTrigger>
-                <TooltipContent side="bottom">Dark Theme</TooltipContent>
+                <TooltipContent side="bottom" hideArrow className="mt-1">Dark Theme</TooltipContent>
             </Tooltip>
             <Tooltip key="light">
                 <TooltipTrigger asChild>
                     <ToolbarButton
-                        className={`w-10 ${theme === SystemTheme.LIGHT ? 'bg-background-tertiary hover:bg-background-tertiary' : 'hover:bg-background-tertiary/50 text-foreground-onlook'}`}
+                        className={`w-10 ${theme === SystemTheme.LIGHT ? 'bg-background-secondary hover:bg-background-tertiary text-foreground-primary' : 'hover:bg-background-tertiary/50 text-foreground-onlook'}`}
                         onClick={() => changeTheme(SystemTheme.LIGHT)}
                     >
                         <Icons.Sun className="h-4 w-4" />
                     </ToolbarButton>
                 </TooltipTrigger>
-                <TooltipContent side="bottom">Light Theme</TooltipContent>
+                <TooltipContent side="bottom" hideArrow className="mt-1">Light Theme</TooltipContent>
             </Tooltip>
         </>
     );

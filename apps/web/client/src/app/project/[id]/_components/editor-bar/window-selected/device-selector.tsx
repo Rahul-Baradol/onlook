@@ -77,6 +77,12 @@ export const DeviceSelector = observer(() => {
                 const roundedWidth = Math.round(w);
                 const roundedHeight = Math.round(h);
                 editorEngine.frames.updateAndSaveToStorage(frameData.frame.id, { dimension: { width: roundedWidth, height: roundedHeight } });
+                
+                // Ensure the window remains selected after the update
+                setTimeout(() => {
+                    editorEngine.frames.select([frameData.frame]);
+                    editorEngine.elements.clear();
+                }, 0);
             }
         }
     };
@@ -90,7 +96,7 @@ export const DeviceSelector = observer(() => {
                         <span className="font-medium">{deviceType}</span>
                     </SelectTrigger>
                 </TooltipTrigger>
-                <TooltipContent side="bottom">Device</TooltipContent>
+                <TooltipContent side="bottom" hideArrow className="mt-1">Device</TooltipContent>
             </Tooltip>
             <SelectContent>
                 {Object.entries(DEVICE_OPTIONS).map(([category, devices]) => (
@@ -100,7 +106,7 @@ export const DeviceSelector = observer(() => {
                             <SelectItem
                                 key={`${category}:${name}`}
                                 value={`${category}:${name}`}
-                                className="text-xs flex items-center"
+                                className="text-xs flex items-center hover:bg-background-tertiary/20 hover:text-foreground-primary text-foreground-onlook cursor-pointer"
                             >
                                 <DeviceIcon deviceType={category} orientation={metadata.orientation} />
                                 {name} ({dimensions})

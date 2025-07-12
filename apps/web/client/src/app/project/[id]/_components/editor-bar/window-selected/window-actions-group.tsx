@@ -53,7 +53,7 @@ export function WindowActionsGroup({ frameData }: { frameData: FrameData }) {
                         )}
                     </ToolbarButton>
                 </TooltipTrigger>
-                <TooltipContent side="bottom">Duplicate Window</TooltipContent>
+                <TooltipContent side="bottom" hideArrow className="mt-1">Duplicate Window</TooltipContent>
             </Tooltip>
             {editorEngine.frames.canDelete() && (
                 <Tooltip key="delete">
@@ -71,7 +71,7 @@ export function WindowActionsGroup({ frameData }: { frameData: FrameData }) {
                         </ToolbarButton>
 
                     </TooltipTrigger>
-                    <TooltipContent side="bottom">Delete Window</TooltipContent>
+                    <TooltipContent side="bottom" hideArrow className="mt-1">Delete Window</TooltipContent>
                 </Tooltip>
             )}
         </>
