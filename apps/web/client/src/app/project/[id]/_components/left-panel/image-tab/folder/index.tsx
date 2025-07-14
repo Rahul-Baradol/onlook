@@ -121,6 +121,8 @@ export default function Folder() {
             {canGoBack && (
                 <>
                     <div className="flex items-center gap-2">
+                        {/* Fade Gradient Overlay - must be before ArrowLeft and with lower z-index */}
+                        <div className="absolute -left-8 top-0 bottom-0 w-8 bg-gradient-to-r from-black to-transparent z-0 pointer-events-none" />
                         <Button
                             variant="ghost"
                             size="icon"
@@ -133,9 +135,7 @@ export default function Folder() {
 
                         {/* Breadcrumbs Container with Fade Gradient */}
                         <div className="relative flex-1 min-w-0">
-                            {/* Fade Gradient Overlay */}
-                            <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-background-primary to-transparent z-10 pointer-events-none" />
-
+        
                             {/* Breadcrumbs */}
                             <div
                                 ref={breadcrumbsRef}
@@ -197,29 +197,38 @@ export default function Folder() {
                         </button>
                     )}
                 </div>
-                <Button
-                    variant="default"
-                    size="icon"
-                    className="p-2 w-fit h-fit text-foreground-primary border-border-primary hover:border-border-onlook bg-background-secondary hover:bg-background-onlook border"
-                    onClick={() => handleCreateFolder(currentFolder)}
-                >
-                    <Icons.DirectoryPlus className="h-4 w-4" />
-                </Button>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <Button
+                            variant="default"
+                            size="icon"
+                            className="p-2 w-fit h-fit text-foreground-secondary hover:text-foreground-primary border-border-primary hover:border-border-onlook bg-background-secondary hover:bg-background-onlook border"
+                            onClick={() => handleCreateFolder(currentFolder)}
+                        >
+                            <Icons.DirectoryPlus className="h-4 w-4" />
+                        </Button>
+                    </TooltipTrigger>
+                    <TooltipPortal>
+                        <TooltipContent hideArrow className="mb-1">
+                            <p>Create Folder</p>
+                        </TooltipContent>
+                    </TooltipPortal>
+                </Tooltip>
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <Button
                             variant={'default'}
                             size={'icon'}
-                            className="p-2 w-fit h-fit text-foreground-primary border-border-primary hover:border-border-onlook bg-background-secondary hover:bg-background-onlook border"
+                            className="p-2 w-fit h-fit text-foreground-secondary hover:text-foreground-primary border-border-primary hover:border-border-onlook bg-background-secondary hover:bg-background-onlook border"
                             onClick={uploadOperations.handleClickAddButton}
                             disabled={isAnyOperationLoading}
                         >
-                            <Icons.Plus />
+                            <Icons.ImageAdd />
                         </Button>
                     </TooltipTrigger>
                     <TooltipPortal>
-                        <TooltipContent>
-                            <p>Upload an image</p>
+                        <TooltipContent hideArrow className="mb-1">
+                            <p>Upload an Image</p>
                         </TooltipContent>
                     </TooltipPortal>
                 </Tooltip>

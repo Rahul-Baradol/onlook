@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useState, useEffect } from 'react';
 import type { ImageContentData } from '@onlook/models';
 import { ImageItem } from './image-item';
 import { Button } from '@onlook/ui/button';
@@ -24,6 +24,60 @@ export const ImageList = memo(({ images, currentFolder }: ImageListProps) => {
     const { moveState, moveImageToFolder, handleMoveModalToggle } = moveOperations;
     const { handleDragEnter, handleDragLeave, handleDragOver, handleDrop, isDragging } =
         useImageDragDrop(currentFolder);
+    
+    const [loadingImages, setLoadingImages] = useState<Map<string, { url: string; file: File }>>(new Map());
+
+    const handleSeamlessUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = Array.from(e.target.files ?? []);
+        const imageFiles = files.filter((file) => file.type.startsWith('image/'));
+
+        for (const imageFile of imageFiles) {
+            // Create a unique ID for this loading image
+            const loadingId = `loading-${Date.now()}-${Math.random()}`;
+            
+            // Create object URL for immediate preview
+            const objectUrl = URL.createObjectURL(imageFile);
+            
+            // Add to loading state immediately
+            setLoadingImages(prev => new Map(prev).set(loadingId, { url: objectUrl, file: imageFile }));
+            
+            try {
+                // Upload the image
+                await uploadOperations.uploadImage(imageFile, currentFolder);
+                
+                // Remove from loading state when done
+                setLoadingImages(prev => {
+                    const newMap = new Map(prev);
+                    newMap.delete(loadingId);
+                    return newMap;
+                });
+                
+                // Clean up object URL
+                URL.revokeObjectURL(objectUrl);
+            } catch (error) {
+                console.error('Upload failed:', error);
+                // Remove from loading state on error
+                setLoadingImages(prev => {
+                    const newMap = new Map(prev);
+                    newMap.delete(loadingId);
+                    return newMap;
+                });
+                URL.revokeObjectURL(objectUrl);
+            }
+        }
+        
+        // Clear the input
+        e.target.value = '';
+    };
+
+    // Cleanup object URLs on unmount
+    useEffect(() => {
+        return () => {
+            loadingImages.forEach(({ url }) => {
+                URL.revokeObjectURL(url);
+            });
+        };
+    }, [loadingImages]);
 
     return (
         <div
@@ -35,36 +89,47 @@ export const ImageList = memo(({ images, currentFolder }: ImageListProps) => {
         >
             <p className="text-sm text-gray-200 font-medium">Images</p>
             <div className={cn(isDragging && 'cursor-copy bg-teal-500/40', 'h-full')}>
-                {uploadState.isUploading && (
-                    <div className="mb-2 px-3 py-2 text-sm text-blue-600 bg-blue-50 dark:bg-blue-950/50 rounded-md flex items-center gap-2">
-                        <Icons.Reload className="w-4 h-4 animate-spin" />
-                        Uploading image...
-                    </div>
-                )}
-                {images.length === 0 && (
-                    <div className="h-full w-full flex items-center justify-center text-center opacity-70">
-                        <Button
-                            onClick={handleClickAddButton}
-                            variant={'default'}
-                            className="p-2.5 w-full h-fit gap-2 bg-gray-800 hover:bg-gray-700 text-white font-normal"
-                        >
-                            <Icons.Plus />
-                            <span>Add an Image</span>
-                        </Button>
-                    </div>
-                )}
+
                 <div className="w-full grid grid-cols-2 gap-3 p-0 overflow-y-auto">
                     <input
                         type="file"
                         accept="image/*"
                         className="hidden"
                         id="images-upload"
-                        onChange={(e) => handleUploadFile(e, currentFolder)}
+                        onChange={handleSeamlessUpload}
                         multiple
-                        disabled={uploadState.isUploading}
                     />
+                    
+                    {/* Actual Images */}
                     {images.map((image) => (
                         <ImageItem key={image.originPath} image={image} />
+                    ))}
+                    
+                    {/* Add Image Button - Right after the last image */}
+                    <div 
+                        className="aspect-square rounded-lg bg-foreground-onlook/50 opacity-20 hover:opacity-100 hover:bg-background-primary hover:border-[0.5px] hover:border-foreground-onlook/50 cursor-pointer flex flex-col items-center justify-center transition-all duration-200 group"
+                        onClick={(e) => handleClickAddButton(e as any)}
+                    >
+                        <div className="opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center gap-2 cursor-pointer">
+                            <Icons.ImageAdd className="w-5 h-5 text-foreground-onlook" />
+                            <span className="text-sm text-foreground-onlook">Add an Image</span>
+                        </div>
+                    </div>
+                    
+                    {/* Loading Images */}
+                    {Array.from(loadingImages.entries()).map(([loadingId, { url }]) => (
+                        <div key={loadingId} className="aspect-square rounded-lg overflow-hidden opacity-50 transition-opacity duration-300">
+                            <img 
+                                src={url} 
+                                alt="Loading..." 
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+                    ))}
+                    
+                    {/* Placeholder blocks - Always show remaining slots */}
+                    {Array.from({ length: Math.max(0, 7 - images.length - loadingImages.size - 1) }).map((_, index) => (
+                        <div key={`placeholder-${index}`} className="aspect-square rounded-lg bg-foreground-onlook/50 opacity-20"></div>
                     ))}
                 </div>
             </div>
