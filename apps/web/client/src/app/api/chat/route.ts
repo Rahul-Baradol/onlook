@@ -18,23 +18,23 @@ export async function POST(req: NextRequest) {
             });
         }
         const usageCheckResult = await checkMessageLimit(req);
-        if (usageCheckResult.exceeded) {
-            trackEvent({
-                distinctId: user.id,
-                event: 'message_limit_exceeded',
-                properties: {
-                    usage: usageCheckResult.usage,
-                },
-            });
-            return new Response(JSON.stringify({
-                error: 'Message limit exceeded. Please upgrade to a paid plan.',
-                code: 402,
-                usage: usageCheckResult.usage,
-            }), {
-                status: 402,
-                headers: { 'Content-Type': 'application/json' }
-            });
-        }
+        // if (usageCheckResult.exceeded) {
+        //     trackEvent({
+        //         distinctId: user.id,
+        //         event: 'message_limit_exceeded',
+        //         properties: {
+        //             usage: usageCheckResult.usage,
+        //         },
+        //     });
+        //     return new Response(JSON.stringify({
+        //         error: 'Message limit exceeded. Please upgrade to a paid plan.',
+        //         code: 402,
+        //         usage: usageCheckResult.usage,
+        //     }), {
+        //         status: 402,
+        //         headers: { 'Content-Type': 'application/json' }
+        //     });
+        // }
 
         return streamResponse(req);
     } catch (error: any) {
@@ -64,8 +64,14 @@ export const streamResponse = async (req: NextRequest) => {
     }
 
     const { model, providerOptions, headers } = await getModelFromType(chatType);
+
+    console.log('Chat type:', chatType, 'Model:', model);
+
     const systemPrompt = await getSystemPromptFromType(chatType);
     const tools = await getToolSetFromType(chatType);
+
+    console.log('Tools:', tools);
+
     const result = streamText({
         model,
         headers,
