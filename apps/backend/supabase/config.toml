@@ -8,10 +8,10 @@ extra_search_path = ["public"]
 max_rows = 100
 
 [auth]
-site_url = "https://onlook.com"
+site_url = "http://trythefit.com:3000"
 additional_redirect_urls = [
-    "http://localhost:3000",
-    "http://localhost:3000/auth/callback",
+    "http://trythefit.com:3000",
+    "http://trythefit.com:3000/auth/callback",
 ]
 jwt_expiry = 36000
 
@@ -25,13 +25,13 @@ port = 54323
 enabled = true
 client_id = "env(GITHUB_CLIENT_ID)"
 secret = "env(GITHUB_SECRET)"
-redirect_uri = "http://127.0.0.1:54321/auth/v1/callback"
+redirect_uri = "http://trythefit.com:54321/auth/v1/callback"
 
 [auth.external.google]
 enabled = true
 client_id = "env(GOOGLE_CLIENT_ID)"
 secret = "env(GOOGLE_SECRET)"
-redirect_uri = "http://127.0.0.1:54321/auth/v1/callback"
+redirect_uri = "http://trythefit.com:54321/auth/v1/callback"
 
 [analytics]
 enabled = true

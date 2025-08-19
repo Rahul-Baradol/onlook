@@ -5,7 +5,7 @@ import {
     conversationUpdateSchema,
     toConversation
 } from '@onlook/db';
-import { LLMProvider, OPENROUTER_MODELS } from '@onlook/models';
+import { ANTHROPIC_MODELS, LLMProvider, OPENROUTER_MODELS } from '@onlook/models';
 import { generateText } from 'ai';
 import { eq } from 'drizzle-orm';
 import { z } from 'zod';
@@ -71,8 +71,8 @@ export const conversationRouter = createTRPCRouter({
         }))
         .mutation(async ({ ctx, input }) => {
             const { model, providerOptions, headers } = await initModel({
-                provider: LLMProvider.OPENROUTER,
-                model: OPENROUTER_MODELS.CLAUDE_4_SONNET,
+                provider: LLMProvider.ANTHROPIC,
+                model: ANTHROPIC_MODELS.HAIKU,
             });
 
             const MAX_NAME_LENGTH = 50;

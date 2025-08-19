@@ -39,7 +39,7 @@ export async function GET(request: Request) {
             if (isLocalEnv) {
                 return NextResponse.redirect(`${origin}/auth/redirect`);
             } else if (forwardedHost) {
-                return NextResponse.redirect(`https://${forwardedHost}/auth/redirect`);
+                return NextResponse.redirect(`http://${forwardedHost}/auth/redirect`);
             } else {
                 return NextResponse.redirect(`${origin}/auth/redirect`);
             }
