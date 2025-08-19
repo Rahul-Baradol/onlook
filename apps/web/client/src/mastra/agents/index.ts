@@ -42,7 +42,7 @@ export const onlookAgent = new Agent({
             case ChatType.FIX:
                 model = await initModel({
                     provider: LLMProvider.ANTHROPIC,
-                    model: ANTHROPIC_MODELS.HAIKU,
+                    model: ANTHROPIC_MODELS.SONNET_4,
                 });
                 break;
             case ChatType.ASK:

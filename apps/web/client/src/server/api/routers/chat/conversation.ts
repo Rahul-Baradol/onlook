@@ -72,7 +72,7 @@ export const conversationRouter = createTRPCRouter({
         .mutation(async ({ ctx, input }) => {
             const { model, providerOptions, headers } = await initModel({
                 provider: LLMProvider.ANTHROPIC,
-                model: ANTHROPIC_MODELS.HAIKU,
+                model: ANTHROPIC_MODELS.SONNET_4,
             });
 
             const MAX_NAME_LENGTH = 50;

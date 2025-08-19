@@ -9,7 +9,7 @@ export async function getModelFromType(chatType: ChatType) {
         case ChatType.FIX:
             model = await initModel({
                 provider: LLMProvider.ANTHROPIC,
-                model: ANTHROPIC_MODELS.HAIKU,
+                model: ANTHROPIC_MODELS.SONNET_4,
             });
             break;
         case ChatType.ASK:
@@ -17,7 +17,7 @@ export async function getModelFromType(chatType: ChatType) {
         default:
             model = await initModel({
                 provider: LLMProvider.ANTHROPIC,
-                model: ANTHROPIC_MODELS.HAIKU,
+                model: ANTHROPIC_MODELS.SONNET_4,
             });
             break;
     }
@@ -61,7 +61,7 @@ export const repairToolCall = async ({ toolCall, tools, error }: { toolCall: Too
 
     const { model } = await initModel({
         provider: LLMProvider.ANTHROPIC,
-        model: ANTHROPIC_MODELS.HAIKU,
+        model: ANTHROPIC_MODELS.SONNET_4,
     });
 
     const { object: repairedArgs } = await generateObject({

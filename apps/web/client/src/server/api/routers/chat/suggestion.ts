@@ -21,7 +21,7 @@ export const suggestionsRouter = createTRPCRouter({
         .mutation(async ({ ctx, input }) => {
             const { model, headers } = await initModel({
                 provider: LLMProvider.ANTHROPIC,
-                model: ANTHROPIC_MODELS.HAIKU,
+                model: ANTHROPIC_MODELS.SONNET_4,
             });
             const { object } = await generateObject({
                 model,
