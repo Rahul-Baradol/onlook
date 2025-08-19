@@ -17,7 +17,7 @@ export async function getModelFromType(chatType: ChatType) {
         default:
             model = await initModel({
                 provider: LLMProvider.ANTHROPIC,
-                model: ANTHROPIC_MODELS.SONNET_4,
+                model: ANTHROPIC_MODELS.HAIKU,
             });
             break;
     }
